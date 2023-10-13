@@ -23,42 +23,67 @@ export class HomePage {
 
   ionViewDidEnter() {
 
-    //menambahkan basemap atau inisialisasi view peta
-    this.map = L.map('mapId').setView([-7.6860182143175155, 110.3416410826356], 10)
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(this.map);
+    // //menambahkan basemap atau inisialisasi view peta
+    // this.map = L.map('mapId').setView([-7.6860182143175155, 110.3416410826356], 10)
+    // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    // }).addTo(this.map);
 
-    //membuat basemap grup dengan tile layer dari masing-masing basemap
-    var basemapGroup = L.layerGroup([
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-      }),
-      L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
-        attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>'
-      }),
-      L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-        attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-      }),
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-      }),
-    ]);
+    // //membuat basemap grup dengan tile layer dari masing-masing basemap
+    // var basemapGroup = L.layerGroup([
+    //   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     attribution: '&copy; OpenStreetMap contributors'
+    //   }),
+    //   L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
+    //     attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>'
+    //   }),
+    //   L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    //     attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+    //   }),
+    //   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    //   }),
+    // ]);
 
-    //menambahkan grup basemap ke dalam peta
-    basemapGroup.addTo(this.map);
+    // //menambahkan grup basemap ke dalam peta
+    // basemapGroup.addTo(this.map);
 
-    //menambahkan kontrol peta berdasarkan grup basemap dari masing-masing layer (menggunakan array untuk mengambil basemap berdasarkan urutan)
-    var basemapControl = L.control.layers({
-      'Wikimedia': basemapGroup.getLayers()[1],
-      'Topo-Vector': basemapGroup.getLayers()[2],
-      'Black Carto DB': basemapGroup.getLayers()[3],
-      'OpenStreetMap': basemapGroup.getLayers()[0],
+    // //menambahkan kontrol peta berdasarkan grup basemap dari masing-masing layer (menggunakan array untuk mengambil basemap berdasarkan urutan)
+    // var basemapControl = L.control.layers({
+    //   'Wikimedia': basemapGroup.getLayers()[1],
+    //   'Topo-Vector': basemapGroup.getLayers()[2],
+    //   'Black Carto DB': basemapGroup.getLayers()[3],
+    //   'OpenStreetMap': basemapGroup.getLayers()[0],
+    // });
+
+
+    // //menambahkan basemap kontrol ke dalam map
+    // basemapControl.addTo(this.map);
+
+    const basemap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 20,
+			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		});
+
+		const basemap1 = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
+			maxZoom: 20,
+			attribution: '<a href="https://github.com/cyclosm/cyclosm-cartocss-style/releases" title="CyclOSM - Open Bicycle render">CyclOSM</a> | Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		});
+    const basemap2 = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+      maxZoom: 20,
+      attribution: '&copy; <a href="https://opentopomap.org/about.html">OpenTopoMap</a> contributors'
     });
 
+		basemap.addTo(this.map);
 
-    //menambahkan basemap kontrol ke dalam map
-    basemapControl.addTo(this.map);
+    /* Control Layer */
+		var baseMaps = {
+      "OpenStreetMap": basemap,
+      "CyclOSM": basemap1,
+      "OpenTopo": basemap2
+    };
+  
+    L.control.layers(baseMaps, ).addTo(this.map);
 
     const markerIcon = L.icon({
     iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png', // Ganti dengan URL ikon marker default dari CDN 
